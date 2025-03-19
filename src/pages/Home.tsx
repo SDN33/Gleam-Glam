@@ -177,6 +177,24 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Video Unboxing Section */}
+      <div className="max-w-[400px] mx-auto px-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-serif mb-4">Découvrez l'expérience</h2>
+          <p className="text-gray-600 text-lg">Regardez notre vidéo de déballage pour voir le produit en action</p>
+        </div>
+        <div className="relative aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl">
+          <video
+            className="w-full h-full object-cover"
+            controls
+            poster={PRODUCT.images[0]}
+          >
+            <source src="/videos/unboxing.mp4" type="video/mp4" />
+            Votre navigateur ne supporte pas la lecture de vidéos.
+          </video>
+        </div>
+      </div>
+
       {/* Product Details with Sticky Buy Button */}
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12">
