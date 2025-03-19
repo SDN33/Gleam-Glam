@@ -1,37 +1,43 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
-import Orders from './pages/Orders';
 import Admin from './pages/Admin';
+import Orders from './pages/Orders';
+import Auth from './pages/Auth';
+import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { useAuth } from './hooks/useAuth';
 
-function App() {
-  const { user } = useAuth();
-  const isAdmin = user?.email === 'admin@lessence.com';
-
+export default function App() {
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-[#FDF8F6] ">
+    <Router>
+      <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="container mx-auto -mt-20">
+        <main className="flex-grow -mt-20">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/orders" element={<Orders />} />
+            <Route path="/auth" element={<Auth />} />
             <Route
               path="/admin"
               element={
-                isAdmin ? <Admin /> : <Navigate to="/" replace />
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <Orders />
+                </ProtectedRoute>
               }
             />
           </Routes>
         </main>
         <Footer />
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
-
-export default App;
