@@ -1,29 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Loader2 } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Mail, Lock, Loader2, UserPlus, LogIn } from 'lucide-react';
 
 export default function Auth() {
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLogin, setIsLogin] = useState(!location.state?.isSignUp);
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  useEffect(() => {
+    setIsLogin(!location.state?.isSignUp);
+  }, [location.state?.isSignUp]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-
-      navigate('/admin');
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        navigate('/');
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        if (error) throw error;
+        setError("Un email de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception.");
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -36,17 +49,27 @@ export default function Auth() {
       <div className="max-w-md w-full mx-4">
         <div className="bg-white p-8 rounded-2xl shadow-xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-serif mb-2">Administration</h1>
-            <p className="text-gray-600">Connectez-vous pour gérer votre boutique</p>
+            <h1 className="text-3xl font-serif mb-2">
+              {isLogin ? 'Connexion' : 'Créer un compte'}
+            </h1>
+            <p className="text-gray-600">
+              {isLogin
+                ? 'Connectez-vous pour accéder à votre compte'
+                : 'Inscrivez-vous pour commencer votre expérience'}
+            </p>
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-sm">
+            <div className={`p-4 rounded-lg mb-6 text-sm ${
+              error.includes('confirmation') 
+                ? 'bg-green-50 text-green-600'
+                : 'bg-red-50 text-red-600'
+            }`}>
               {error}
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Email
@@ -93,13 +116,31 @@ export default function Auth() {
               {loading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Connexion en cours...</span>
+                  <span>Chargement...</span>
                 </>
               ) : (
-                <span>Se connecter</span>
+                <>
+                  {isLogin ? (
+                    <LogIn className="h-5 w-5 mr-2" />
+                  ) : (
+                    <UserPlus className="h-5 w-5 mr-2" />
+                  )}
+                  <span>{isLogin ? 'Se connecter' : "S'inscrire"}</span>
+                </>
               )}
             </button>
           </form>
+
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-[#ff4eb4] hover:text-[#ff35aa] text-sm"
+            >
+              {isLogin
+                ? "Pas encore de compte ? S'inscrire"
+                : 'Déjà un compte ? Se connecter'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

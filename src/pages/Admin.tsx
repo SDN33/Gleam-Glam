@@ -14,25 +14,35 @@ interface OrderStats {
   deliveredOrders: number;
 }
 
-interface ChartData {
-  date: string;
-  revenue: number;
-  orders: number;
+type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered';
+
+interface Order {
+  id: string;
+  created_at: string;
+  user_id: string;
+  total: number;
+  status: OrderStatus;
 }
 
-const STATUS_COLORS = {
+const STATUS_COLORS: Record<OrderStatus, string> = {
   pending: 'bg-yellow-100 text-yellow-800',
   processing: 'bg-blue-100 text-blue-800',
   shipped: 'bg-purple-100 text-purple-800',
   delivered: 'bg-green-100 text-green-800'
 };
 
-const STATUS_LABELS = {
+const STATUS_LABELS: Record<OrderStatus, string> = {
   pending: 'En attente',
   processing: 'En cours',
   shipped: 'Expédié',
   delivered: 'Livré'
 };
+
+interface ChartData {
+  date: string;
+  revenue: number;
+  orders: number;
+}
 
 export default function Admin() {
   const [stats, setStats] = useState<OrderStats>({
@@ -46,7 +56,7 @@ export default function Admin() {
     deliveredOrders: 0
   });
   const [chartData, setChartData] = useState<ChartData[]>([]);
-  const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState('dashboard');
 
