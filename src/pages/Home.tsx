@@ -80,7 +80,7 @@ export default function Home() {
           <div className="grid md:grid-cols-12 gap-8 items-center py-6 md:py-16 px-4">
             <div className="md:col-span-7 space-y-8">
               {/* Trust Badges */}
-              <div className="flex flex-wrap gap-4 items-center">
+              <div className="flex flex-wrap gap-4 items-center mt-10">
                 <div className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm flex items-center">
                   <span className="mr-2">🚚</span> Livraison gratuite
                 </div>
