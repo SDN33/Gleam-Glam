@@ -124,33 +124,52 @@ export default function Home() {
             </div>
 
             <div className="md:col-span-5 relative">
-              <div className="aspect-square max-w-md mx-auto relative group">
-                <img 
-                  src={selectedImage}
-                  alt={PRODUCT.name}
-                  className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-                />
-                <button 
-                  onClick={() => setShowZoom(true)}
-                  className="absolute bottom-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <ZoomIn size={20} />
-                </button>
+              <div className="aspect-[9/16] max-w-[280px] mx-auto relative group">
+                {selectedImage.endsWith('.mp4') ? (
+                  <video
+                    className="w-full h-full object-cover rounded-2xl"
+                    controls
+                    poster={PRODUCT.images[0]}
+                  >
+                    <source src={selectedImage} type="video/mp4" />
+                    Votre navigateur ne supporte pas la lecture de vidéos.
+                  </video>
+                ) : (
+                  <>
+                    <img 
+                      src={selectedImage}
+                      alt={PRODUCT.name}
+                      className="w-full h-full object-contain hover:scale-105 transition-transform duration-300 rounded-2xl"
+                    />
+                    <button 
+                      onClick={() => setShowZoom(true)}
+                      className="absolute bottom-4 right-4 bg-white/90 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ZoomIn size={20} />
+                    </button>
+                  </>
+                )}
               </div>
               <div className="flex justify-center mt-4 gap-2">
-                {PRODUCT.images.map((image, index) => (
+                {[...PRODUCT.images, '/videos/unboxing.mp4'].map((source, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImage(image)}
+                    onClick={() => setSelectedImage(source)}
                     className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === image ? 'border-[#ff4eb4] scale-110' : 'border-transparent opacity-70 hover:opacity-100'
+                      selectedImage === source ? 'border-[#ff4eb4] scale-110' : 'border-transparent opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img 
-                      src={image}
-                      alt={`${PRODUCT.name} - Vue ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
+                    {source.endsWith('.mp4') ? (
+                      <div className="w-full h-full bg-[#ff4eb4]/10 flex items-center justify-center">
+                        <span className="text-2xl">▶️</span>
+                      </div>
+                    ) : (
+                      <img 
+                        src={source}
+                        alt={`${PRODUCT.name} - Vue ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </button>
                 ))}
               </div>
@@ -311,24 +330,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Video Unboxing Section */}
-      <div className="max-w-[400px] mx-auto px-4">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-serif mb-4">Découvrez l'expérience</h2>
-          <p className="text-gray-600 text-lg">Regardez notre vidéo de déballage pour voir le produit en action</p>
-        </div>
-        <div className="relative aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl">
-          <video
-            className="w-full h-full object-cover"
-            controls
-            poster={PRODUCT.images[0]}
-          >
-            <source src="/videos/unboxing.mp4" type="video/mp4" />
-            Votre navigateur ne supporte pas la lecture de vidéos.
-          </video>
         </div>
       </div>
 
