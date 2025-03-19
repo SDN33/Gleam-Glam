@@ -4,8 +4,8 @@ import { Minus, Plus, Trash2 } from 'lucide-react';
 
 const PRODUCT = {
   name: "Glam Makeup LCD Mirror Box",
-  price: 49.99,
-  image: "https://images.unsplash.com/photo-1571875257727-256c39da42af?q=80&w=800"
+  price: 29.99,
+  image: "https://res.cloudinary.com/daroyxenr/image/upload/v1742420867/t%C3%A9l%C3%A9chargement_1_tubhyi.png"
 };
 
 export default function Cart() {

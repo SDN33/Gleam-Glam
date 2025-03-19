@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag, User } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
@@ -14,7 +13,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="font-serif text-2xl text-[#ff4eb4]">
-            Gleam and Glam
+          Gleam and Glam 💎
           </Link>
 
           <div className="flex items-center space-x-4">
